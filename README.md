@@ -1,6 +1,6 @@
 # SADBM: Structure-Aware Diffusion Bridge Model for SAR-to-Optical Image Translation (S2OIT)
 
-> SADBM translates a synthetic aperture radar (SAR) image into an optical image using a diffusion bridge that starts from an edge-enhanced version of the SAR input.
+> SADBM translates a synthetic aperture radar (SAR) image into an optical image using a diffusion bridge that starts from an edge-enhanced version of the SAR input
 
 ---
 
