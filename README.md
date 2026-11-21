@@ -81,3 +81,39 @@ SAR2Opt contains co-registered SAR and optical images from multiple cities, with
 ## 5. Installation and Usage
 
 Installation instructions, dependency versions, and commands for training, inference, and evaluation will be provided with the code release. Pretrained model download links and the corresponding configurations will also be documented here.
+
+---
+
+## 🔗 Related Projects
+
+Related work on optical priors, colour control, and cross-tile consistency in SAR-to-optical image translation. Click a figure to view it at full size.
+
+### [DOGAN](https://github.com/Saturn-He/DOGAN)
+
+<p>
+  <a href="https://github.com/Saturn-He/DOGAN/blob/main/assets/Overview_1.png">
+    <img src="https://raw.githubusercontent.com/Saturn-He/DOGAN/main/assets/Overview_1.png" width="360" alt="DOGAN framework overview">
+  </a>
+</p>
+
+DOGAN uses optical priors from a pretrained DINO model to guide GAN-based SAR-to-optical image translation. [Paper](https://doi.org/10.1109/TGRS.2025.3606979)
+
+### [ColorS2O](https://github.com/Saturn-He/ColorS2O)
+
+<p>
+  <a href="https://github.com/Saturn-He/ColorS2O/blob/main/assets/framework.png">
+    <img src="https://raw.githubusercontent.com/Saturn-He/ColorS2O/main/assets/framework.png" width="360" alt="ColorS2O framework overview">
+  </a>
+</p>
+
+ColorS2O uses sparse colour anchors from an optical observation to control the colours of translated images.
+
+### [XTile-S2O](https://github.com/Saturn-He/XTile-S2O)
+
+<p>
+  <a href="https://github.com/Saturn-He/XTile-S2O/blob/main/assets/figures/overview.png">
+    <img src="https://raw.githubusercontent.com/Saturn-He/XTile-S2O/main/assets/figures/overview.png" width="360" alt="XTile-S2O framework overview">
+  </a>
+</p>
+
+XTile-S2O shares context across neighbouring tiles to improve spatial consistency in full-scene SAR-to-optical translation.
