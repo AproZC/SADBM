@@ -84,9 +84,9 @@ Installation instructions, dependency versions, and commands for training, infer
 
 ---
 
-## 🔗 Related Projects
+## 🔗 Our Related Projects
 
-Related work on optical priors, colour control, and cross-tile consistency in SAR-to-optical image translation. Click a figure to view it at full size.
+Explore three other SAR-to-optical image translation projects co-developed by members of the SADBM author team. They address optical priors, colour control, and cross-tile consistency. Click any figure to view it at full size.
 
 ### [DOGAN](https://github.com/Saturn-He/DOGAN)
 
