@@ -83,9 +83,3 @@ SAR2Opt contains co-registered SAR and optical images from multiple cities, with
 Installation instructions, dependency versions, and commands for training, inference, and evaluation will be provided with the code release. Pretrained model download links and the corresponding configurations will also be documented here.
 
 ---
-
-## Contributors
-
-- Yuhang Chen ([@AproZC](https://github.com/AproZC))
-- Yang Jingyi ([@SDD2021-car](https://github.com/SDD2021-car))
-- [@HardCore666](https://github.com/HardCore666)
