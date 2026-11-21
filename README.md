@@ -96,7 +96,7 @@ Explore three other SAR-to-optical image translation projects co-developed by me
   </a>
 </p>
 
-DOGAN uses optical priors from a pretrained DINO model to guide GAN-based SAR-to-optical image translation. [Paper](https://doi.org/10.1109/TGRS.2025.3606979)
+DOGAN uses optical priors from a pretrained DINO model to guide GAN-based SAR-to-optical image translation. ([IEEE TGRS, 2025](https://doi.org/10.1109/TGRS.2025.3606979))
 
 ### [ColorS2O](https://github.com/Saturn-He/ColorS2O)
 
