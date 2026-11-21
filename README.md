@@ -81,5 +81,3 @@ SAR2Opt contains co-registered SAR and optical images from multiple cities, with
 ## 5. Installation and Usage
 
 Installation instructions, dependency versions, and commands for training, inference, and evaluation will be provided with the code release. Pretrained model download links and the corresponding configurations will also be documented here.
-
----
