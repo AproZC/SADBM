@@ -1,84 +1,100 @@
-# SADBM: Structure-Aware Diffusion Bridge Model for SAR-to-Optical Image Translation (S2OIT)
+<h1 align="center"><a name="sadbm-structure-aware-diffusion-bridge-model-for-sar-to-optical-image-translation-s2oit"></a>SADBM</h1>
+<p align="center"><strong>Structure-Aware Diffusion Bridge Model for SAR-to-Optical Image Translation (S2OIT)</strong></p>
 
-> SADBM translates a synthetic aperture radar (SAR) image into an optical image using a diffusion bridge that starts from an edge-enhanced version of the SAR input.
+<p align="center">
+  <img src="./sadbm-cover.jpg" alt="Illustrated river valley transitioning from radar-like speckle through field boundaries to optical colour" width="100%">
+  <br>
+  <sub>AI-generated concept illustration · SAR backscatter → scene boundaries → optical appearance.</sub>
+</p>
 
----
+<p align="center">
+  <a href="#1-overview">Overview</a> ·
+  <a href="#2-key-contributions">Method</a> ·
+  <a href="#3-evaluation">Evaluation</a> ·
+  <a href="#4-datasets">Datasets</a> ·
+  <a href="#release-status">Release and usage</a>
+</p>
 
-## Release Status
+## Overview <a name="1-overview"></a>
 
-| Resource | Status |
-| --- | --- |
-| SADBM source code, configurations, and evaluation scripts | Planned for release upon paper acceptance |
-| Pretrained models | Planned for release upon paper acceptance |
+SADBM translates a synthetic aperture radar (SAR) image into an optical image using a diffusion bridge that starts from an edge-enhanced version of the SAR input.
 
----
+SAR can image the Earth day and night through cloud cover. Translating a SAR observation into optical imagery can make a scene easier to interpret, but speckle and differences between the two sensors can obscure field boundaries, roads, and buildings.
 
-## 1. Overview
+SADBM uses the geometry visible in the SAR observation to guide translation. It learns from paired SAR and optical images and requires **only a SAR image at inference**.
 
-SAR can image the Earth day and night through cloud cover. Translating a SAR observation into optical imagery can make a scene easier to interpret, but speckle and differences between the two sensors can obscure field boundaries, roads, and buildings. SADBM uses the geometry visible in the SAR observation to guide translation. It learns from paired SAR and optical images and requires only a SAR image at inference.
+## Method <a name="2-key-contributions"></a>
 
----
+```mermaid
+flowchart LR
+    accTitle: SADBM inference
+    accDescr: A SAR image enters the E² module, which forms the edge-enhanced source endpoint. A guided diffusion bridge uses a denoiser with an HSE encoder to produce an optical image.
+    sar(["SAR image"]) --> edges["E²<br/>Edge extraction"]
+    edges -->|Edge-enhanced SAR| bridge["Guided diffusion bridge<br/>with HSE encoder"]
+    bridge --> optical(["Optical image"])
+```
 
-## 2. Key Contributions
-
-### 2.1 Structure-Aware Diffusion Bridge (Doob’s h-transform)
+### Structure-Aware Diffusion Bridge (Doob’s h-transform) <a name="21-structure-aware-diffusion-bridge-doobs-h-transform"></a>
 
 We use **Doob’s h-transform** to construct a diffusion bridge between an edge-enhanced SAR image and its paired optical target. During inference, the reverse sampler starts at the SAR-derived endpoint and uses that endpoint to guide each denoising step.
 
-### 2.2 Edge-information Extraction (E²)
+### Edge-information Extraction (E²) <a name="22-edge-information-extraction-e"></a>
 
 A lightweight U-Net learns to refine Sobel edges from SAR images using paired optical edge maps as supervision during pretraining. A learned weight blends the raw and refined SAR edge maps. A multi-scale residual network then fuses the blended edges with the SAR image to form the source endpoint.
 
-### 2.3 Hierarchical Structural Extraction (HSE)
+### Hierarchical Structural Extraction (HSE) <a name="23-hierarchical-structural-extraction-hse"></a>
 
 The **Global-structure Interaction (GI)** block combines patch-wise self-attention with dilated depthwise convolutions to capture long-range structure and local detail. The **Shallow-information Injection (SI)** module uses cross-attention to bring features from several encoder resolutions into the bottleneck, preserving fine geometric detail for the decoder.
 
-### 2.4 SEN1-2 Scene Dataset
-
-We curate **SEN1-2 Scene**, a six-class subset of SEN1-2, to evaluate both image translation and the value of translated optical imagery for scene classification.
-
----
-
-## 3. Evaluation
+## Evaluation <a name="3-evaluation"></a>
 
 ### Image translation
 
 We compare SADBM with 12 baselines on **SEN1-2 Scene** and **SAR2Opt**. Tables II and III of the manuscript report nine metrics.
+
+| Dataset | SADBM on the seven paired metrics | Lowest FID and KID |
+| --- | --- | --- |
+| SEN1-2 Scene | **First on all seven** | Palette |
+| SAR2Opt | **First on six**. cBBDM has the lowest LPIPS. | ASGIT |
 
 | Comparison | Metrics (↑ higher is better, ↓ lower is better) |
 | --- | --- |
 | Each translation and its paired optical reference | PSNR ↑, SSIM ↑, CW-SSIM ↑, MHD ↓, RMSE ↓, LPIPS ↓, FSIM ↑ |
 | The sets of translated and real optical images | FID ↓, KID ↓ |
 
-Paired metrics use the full image at its inference resolution. For SEN1-2 Scene, both images are evaluated at their native 256 × 256 pixels. For SAR2Opt, the full 600 × 600 optical reference is resized to 512 × 512 with bicubic interpolation to match the prediction. RGB PSNR uses one mean squared error over all pixels and all three channels. The **modified Hausdorff distance (MHD)** measures boundary localization error in pixels between Canny edge maps extracted from the translation and its optical reference.
+<details>
+<summary><strong>Evaluation protocol</strong> · Image sizes, RGB PSNR, and boundary error</summary>
 
-SADBM ranks first on all seven paired metrics on SEN1-2 Scene and on six of seven on SAR2Opt, where cBBDM achieves the lowest LPIPS. Palette achieves the lowest FID and KID on SEN1-2 Scene, and ASGIT achieves the lowest FID and KID on SAR2Opt.
+Paired metrics use the full image at its inference resolution. For SEN1-2 Scene, both images are evaluated at their native 256 × 256 pixels. For SAR2Opt, the full 600 × 600 optical reference is resized to 512 × 512 with bicubic interpolation to match the prediction.
+
+RGB PSNR uses one mean squared error over all pixels and all three channels. The **modified Hausdorff distance (MHD)** measures boundary localization error in pixels between Canny edge maps extracted from the translation and its optical reference.
+
+</details>
 
 ### Downstream scene classification
 
 On SEN1-2 Scene, we concatenate the SAR input with its translated optical image and compare classification against a SAR-only baseline. Tables IX–XII report per-class precision, overall accuracy (OA), average accuracy (AA, the mean per-class recall), and Cohen’s kappa for **ResNet-18**, **ResNet-50**, **DINO**, and **DINOv2**.
 
----
+## Datasets <a name="4-datasets"></a>
 
-## 4. Datasets
+### SEN1-2 Scene <a name="24-sen1-2-scene-dataset"></a><a name="41-sen1-2-scene"></a>
 
-### 4.1 SEN1-2 Scene
+We curate **SEN1-2 Scene**, a six-class subset of SEN1-2, to evaluate both image translation and the value of translated optical imagery for scene classification.
 
 The six scene categories are **Farmland, Forest, Mountain, Rural, Semi-Urban, and Urban**. The paired SAR and optical images come from the [SEN1-2 benchmark](https://isprs-annals.copernicus.org/articles/IV-1/141/2018/).
 
-| Split | Number of SAR–optical image pairs |
-| --- | ---: |
-| Training | 3,785 |
-| Test | 944 |
-| Total | 4,729 |
+| Training pairs | Test pairs | Total pairs |
+| ---: | ---: | ---: |
+| 3,785 | 944 | **4,729** |
 
-### 4.2 SAR2Opt
+### SAR2Opt <a name="42-sar2opt"></a>
 
 SAR2Opt contains co-registered SAR and optical images from multiple cities, with dense urban structures imaged at 1 m resolution. Dataset downloads, documentation, and citation information are available from the [official SAR2Opt repository](https://github.com/MarsZhaoYT/SAR2Opt-Heterogeneous-Dataset).
 
----
+## Release and usage <a name="release-status"></a><a name="5-installation-and-usage"></a>
 
-## 5. Installation and Usage
+> [!NOTE]
+> The SADBM source code, configurations, evaluation scripts, and pretrained models are planned for release upon paper acceptance.
 
 Installation instructions, dependency versions, and commands for training, inference, and evaluation will be provided with the code release. Pretrained model download links and the corresponding configurations will also be documented here.
 
