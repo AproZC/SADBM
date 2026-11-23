@@ -2,9 +2,9 @@
 <p align="center"><strong>Structure-Aware Diffusion Bridge Model for SAR-to-Optical Image Translation (S2OIT)</strong></p>
 
 <p align="center">
-  <a href="./sadbm-cover.jpg?raw=true"><img src="./sadbm-cover.jpg" width="100%" alt="Conditional diffusion models, GANs, and SADBM compared for SAR-to-optical translation, showing the edge-enhanced SAR endpoint in SADBM."></a>
+  <a href="./fig01-framework-comparison.jpg?raw=true"><img src="./fig01-framework-comparison.jpg" width="100%" alt="Conditional diffusion models, GANs, and SADBM compared for SAR-to-optical translation, showing the edge-enhanced SAR endpoint in SADBM."></a>
   <br>
-  <sub><strong>Figure 1.</strong> Comparison of conditional diffusion models, GANs, and the proposed SADBM for SAR-to-optical translation. <a href="./sadbm-cover.jpg?raw=true">Full resolution</a></sub>
+  <sub><strong>Figure 1.</strong> Comparison of conditional diffusion models, GANs, and the proposed SADBM for SAR-to-optical translation. <a href="./fig01-framework-comparison.jpg?raw=true">Full resolution</a></sub>
 </p>
 
 <p align="center">
