@@ -2,9 +2,9 @@
 <p align="center"><strong>Structure-Aware Diffusion Bridge Model for SAR-to-Optical Image Translation (S2OIT)</strong></p>
 
 <p align="center">
-  <img src="./sadbm-cover.jpg" alt="Illustrated river valley transitioning from radar-like speckle through field boundaries to optical colour" width="100%">
+  <a href="./sadbm-cover.jpg?raw=true"><img src="./sadbm-cover.jpg" width="100%" alt="Conditional diffusion models, GANs, and SADBM compared for SAR-to-optical translation, showing the edge-enhanced SAR endpoint in SADBM."></a>
   <br>
-  <sub>AI-generated concept illustration · SAR backscatter → scene boundaries → optical appearance.</sub>
+  <sub><strong>Figure 1.</strong> Comparison of conditional diffusion models, GANs, and the proposed SADBM for SAR-to-optical translation. <a href="./sadbm-cover.jpg?raw=true">Full resolution</a></sub>
 </p>
 
 <p align="center">
@@ -25,18 +25,21 @@ SADBM uses the geometry visible in the SAR observation to guide translation. It 
 
 ## Method <a name="2-key-contributions"></a>
 
-```mermaid
-flowchart LR
-    accTitle: SADBM inference
-    accDescr: A SAR image enters the E² module, which forms the edge-enhanced source endpoint. A guided diffusion bridge uses a denoiser with an HSE encoder to produce an optical image.
-    sar(["SAR image"]) --> edges["E²<br/>Edge extraction"]
-    edges -->|Edge-enhanced SAR| bridge["Guided diffusion bridge<br/>with HSE encoder"]
-    bridge --> optical(["Optical image"])
-```
+<p align="center">
+  <a href="./figures/fig02-training.jpg?raw=true"><img src="./figures/fig02-training-preview.jpg" width="100%" alt="SADBM training diagram with optical-edge supervision during pretraining and bridge denoising during training."></a>
+  <br>
+  <sub><strong>Figure 2.</strong> Training SADBM and pretraining its SAR edge-refinement network. <a href="./figures/fig02-training.jpg?raw=true">Full resolution</a></sub>
+</p>
 
 ### Structure-Aware Diffusion Bridge (Doob’s h-transform) <a name="21-structure-aware-diffusion-bridge-doobs-h-transform"></a>
 
 We use **Doob’s h-transform** to construct a diffusion bridge between an edge-enhanced SAR image and its paired optical target. During inference, the reverse sampler starts at the SAR-derived endpoint and uses that endpoint to guide each denoising step.
+
+<p align="center">
+  <a href="./figures/fig03-inference.jpg?raw=true"><img src="./figures/fig03-inference-preview.jpg" width="100%" alt="SADBM inference starting from the edge-enhanced SAR image and iteratively denoising to produce an optical image."></a>
+  <br>
+  <sub><strong>Figure 3.</strong> SADBM inference from an edge-enhanced SAR input with all network parameters frozen. <a href="./figures/fig03-inference.jpg?raw=true">Full resolution</a></sub>
+</p>
 
 ### Edge-information Extraction (E²) <a name="22-edge-information-extraction-e"></a>
 
@@ -70,6 +73,20 @@ Paired metrics use the full image at its inference resolution. For SEN1-2 Scene,
 RGB PSNR uses one mean squared error over all pixels and all three channels. The **modified Hausdorff distance (MHD)** measures boundary localization error in pixels between Canny edge maps extracted from the translation and its optical reference.
 
 </details>
+
+### Qualitative comparisons
+
+<p align="center">
+  <a href="./figures/fig08-sen1-2-scene.jpg?raw=true"><img src="./figures/fig08-sen1-2-scene-preview.jpg" width="100%" alt="SAR inputs, twelve baseline translations, SADBM predictions, and optical references on SEN1-2 Scene, with magnified regions."></a>
+  <br>
+  <sub><strong>Figure 8.</strong> Qualitative comparison on SEN1-2 Scene, with enlarged regions below the full images. <a href="./figures/fig08-sen1-2-scene.jpg?raw=true">Full resolution</a></sub>
+</p>
+
+<p align="center">
+  <a href="./figures/fig09-sar2opt.jpg?raw=true"><img src="./figures/fig09-sar2opt-preview.jpg" width="100%" alt="SAR inputs, twelve baseline translations, SADBM predictions, and optical references on SAR2Opt, with magnified regions."></a>
+  <br>
+  <sub><strong>Figure 9.</strong> Qualitative comparison on SAR2Opt, with enlarged regions below the full images. <a href="./figures/fig09-sar2opt.jpg?raw=true">Full resolution</a></sub>
+</p>
 
 ### Downstream scene classification
 
